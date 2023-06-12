@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "525477365686",
+    "project_id": "phone-authentication-efc94",
+    "storage_bucket": "phone-authentication-efc94.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525477365686:android:b71f9a4c0dbd715c66a317",
+        "android_client_info": {
+          "package_name": "com.example.ijloans"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525477365686-9oim2gf9ip4r3ergjtq1nnumb5otcgb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAu6Qgsa_upinlmdwaM56q22ID7OiE4u7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "525477365686-9oim2gf9ip4r3ergjtq1nnumb5otcgb6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "525477365686-0l4dm84clt3od1cbkcbnq3d1a55ibgob.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ijloans.RunnerTests"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
