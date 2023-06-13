@@ -39,7 +39,7 @@ class ApiServices with ChangeNotifier {
       // 'timestamp': DateTime.now().toString(),
     });
     final response = await Dio()
-        .post('https://hhivaranasi.com/ijl/api/register.php', data: formData);
+        .post('https://hhivaranasi.com/ijl/api/signup.php', data: formData);
     if (response.statusCode == 200 || response.statusCode == 201) {
       // final data = json.decode(response.body);
       // var jsonResponse =

@@ -10,8 +10,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../providers/ApiServices.dart';
-import 'otp.dart';
+import '../../providers/ApiServices.dart';
+import 'otpVerfiy.dart';
+import 'sendOtp.dart';
 
 // ignore: use_key_in_widget_constructors
 class SignUpButton extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SignUpButtonState extends State<SignUpButton> {
   FirebaseAuth auth = FirebaseAuth.instance;
   Timer? _timer;
   late TextEditingController _email;
-  late TextEditingController _phone;
+
   late TextEditingController _fullname;
   late TextEditingController _dob;
   late TextEditingController _aniversity;
@@ -33,6 +34,7 @@ class _SignUpButtonState extends State<SignUpButton> {
   late TextEditingController otpController;
   var receivedID = '';
   String gender = '';
+  late TextEditingController _phone;
   String phoneErrorMsg = '';
   bool phoneError = false;
 
@@ -247,6 +249,7 @@ class _SignUpButtonState extends State<SignUpButton> {
                         border: OutlineInputBorder(),
                       ),
                     ),
+
                     //     SizedBox(
                     //
                     //   height: error==false ?20:0,
@@ -637,16 +640,26 @@ class _SignUpButtonState extends State<SignUpButton> {
                                 _fullname.text, _email.text, _phone.text)
                             .then((el) {
                           print("sucess${el}");
-                          // Navigator.push(
-                          //     context,
-                          //     new MaterialPageRoute(
-                          //         builder: (context) => new OtpVerify()));
+                          showModalBottomSheet<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 500,
+                                child: OtpVerify(),
+                              );
+                            },
+                          );
                         }).catchError((err) {
                           print("err${err}");
-                          // Navigator.push(
-                          //     context,
-                          //     new MaterialPageRoute(
-                          //         builder: (context) => new OtpVerify()));
+                          showModalBottomSheet<void>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: 500,
+                                child: OtpVerify(),
+                              );
+                            },
+                          );
                         });
                         print("test");
                         //   // If the form is valid, display a snackbar. In the real world,
@@ -691,8 +704,13 @@ class _SignUpButtonState extends State<SignUpButton> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text('Alerady Have an Account ?',
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                new MaterialPageRoute(
+                                    builder: (context) => new SendOTP()));
+                          },
+                          child: Text('Alerady Have an Account ? Login',
                               style: TextStyle(
                                 color: Color.fromRGBO(24, 56, 113, 1),
                               ))),

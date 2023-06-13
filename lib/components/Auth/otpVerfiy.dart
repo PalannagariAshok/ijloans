@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ijloans/components/signup.dart';
+import 'package:ijloans/components/Auth/signup.dart';
 
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,8 @@ import 'package:pin_input_text_field/pin_input_text_field.dart';
 
 import 'package:sms_autofill/sms_autofill.dart';
 
-import '../providers/ApiServices.dart';
+import '../../providers/ApiServices.dart';
+import '../Pages/LandingPage.dart';
 
 class OtpVerify extends StatefulWidget {
   @override
@@ -34,6 +35,9 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
   final formKey = GlobalKey<FormState>();
   late TextEditingController _otp;
   int _start = 60;
+  late TextEditingController _phone;
+  String phoneErrorMsg = '';
+  bool phoneError = false;
 
   var receivedID = '';
 
@@ -116,14 +120,16 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
       });
     });
     // _listOPT();
-    startTimer();
+    // startTimer();
     _otp = TextEditingController();
-    verifyUserPhoneNumber();
+    _phone = TextEditingController();
+    // verifyUserPhoneNumber();
   }
 
   @override
   void dispose() {
     _otp.dispose();
+    _phone.dispose();
     _timer!.cancel();
     super.dispose();
   }
@@ -135,11 +141,12 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
   // }
   @override
   Widget build(BuildContext context) {
+    var ApiService = Provider.of<ApiServices>(context, listen: false);
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        title: Text("OTP"),
-      ),
+      // appBar: AppBar(
+      //   title: Text("Verfiy OTP sent to ${ApiService.registerPhone}"),
+      // ),
       body: Form(
         key: formKey,
         child: Container(
@@ -150,31 +157,10 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'images/logo.png',
-                width: 150.0,
-                height: 150.0,
+              Text(
+                "OTP verfiy sent to ${ApiService.registerPhone}",
+                style: TextStyle(fontSize: 20),
               ),
-              // Text('${otpCode}'),
-              // Container(
-              //   child:  PinFieldAutoFill(
-              //     decoration: UnderlineDecoration(
-              //       textStyle: TextStyle(fontSize: 20, color: Colors.black),
-              //       colorBuilder: FixedColorBuilder(Colors.black.withOpacity(0.3)),
-              //     ),
-              //     codeLength: 4,
-              //     onCodeSubmitted: (code) {},
-              //     onCodeChanged: (code) {
-              //       if (code!.length== 6) {
-              //         FocusScope.of(context).requestFocus(FocusNode());
-              //       }
-              //     },
-              //   ),
-              // ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height / 8,
-              ),
-
               PinCodeTextField(
                 appContext: context,
                 length: 6,
@@ -259,7 +245,6 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
               SizedBox(
                 height: 20,
               ),
-
               ElevatedButton(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(
@@ -273,7 +258,11 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
                 // background
                 // foreground
                 onPressed: () async {
-                  verifyOTPCode();
+                  // verifyOTPCode();
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new LandingPage()));
                 },
                 child: Text('Verify OTP',
                     style: TextStyle(

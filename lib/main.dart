@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ijloans/providers/ApiServices.dart';
 
-import 'components/signup.dart';
+import 'components/Auth/signup.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
