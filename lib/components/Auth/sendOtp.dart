@@ -13,7 +13,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
 
 import 'package:sms_autofill/sms_autofill.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../providers/ApiServices.dart';
 import 'otpVerfiy.dart';
 
@@ -229,15 +229,29 @@ class _SendOTPState extends State<SendOTP> with CodeAutoFill {
                 // background
                 // foreground
                 onPressed: () async {
-                  showModalBottomSheet<void>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Container(
-                        height: 500,
-                        child: OtpVerify(),
-                      );
-                    },
-                  );
+                  if (formKey.currentState!.validate()) {
+                    var ApiService =
+                        await Provider.of<ApiServices>(context, listen: false);
+                    ApiService.LoginPhoneNumber(_phone.text);
+                    ApiService.UserProfile(_phone.text).then((el) {
+                      print(el.runtimeType);
+
+                      if (el is List<dynamic>) {
+                        showModalBottomSheet<void>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return Container(
+                              height: 500,
+                              child: OtpVerify(),
+                            );
+                          },
+                        );
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "Authentication failed, Please Signup");
+                      }
+                    });
+                  }
                 },
                 child: Text('Send OTP',
                     style: TextStyle(fontSize: 18, color: Colors.white)),

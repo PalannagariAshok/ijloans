@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ijloans/components/Pages/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Constants/colors.dart';
 import 'LoanProducts.dart';
 
 final List<String> images = [
@@ -64,6 +67,54 @@ class _LandingPageState extends State<LandingPage> {
                   size: 24,
                 ),
                 onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => new Profile()));
+                  // getProductList();
+                  //categoryData.searching();
+                }),
+            IconButton(
+                icon: Icon(
+                  Icons.logout,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                onPressed: () {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          content: Text("Are you sure to Logout"),
+                          actions: <Widget>[
+                            MaterialButton(
+                              color: primaryColor1,
+                              onPressed: () async {
+                                SharedPreferences prefrences =
+                                    await SharedPreferences.getInstance();
+                                prefrences.setString('login', "null");
+                                Navigator.pushNamedAndRemoveUntil(context,
+                                    '/login', (Route<dynamic> route) => false);
+                                // Navigator.pop(context);
+                              },
+                              child: Text(
+                                "Yes",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            OutlinedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text(
+                                "No",
+                                // style: TextStyle(color: primaryColor1),
+                              ),
+                            ),
+                          ],
+                        );
+                      });
                   // getProductList();
                   //categoryData.searching();
                 }),

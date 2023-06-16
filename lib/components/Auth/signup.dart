@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -174,10 +175,14 @@ class _SignUpButtonState extends State<SignUpButton> {
                     SizedBox(
                       height: 10,
                     ),
-                    Text('Verification Code will be sent to Mobile Number'),
+                    Text(
+                      'Sign Up',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
 
                     SizedBox(
-                      height: 10,
+                      height: 20,
                     ),
 
                     TextFormField(
@@ -615,90 +620,87 @@ class _SignUpButtonState extends State<SignUpButton> {
                   ],
                 ),
                 child: Column(children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(
-                            Color.fromRGBO(24, 56, 113, 1)),
-                        // minimumSize: MaterialStateProperty.all(MediaQuery.of(context).size.width, 50),
-                        // padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/4, 15,MediaQuery.of(context).size.width/4, 15)),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ))),
-                    // background
-                    // foreground
-                    onPressed: () async {
-                      // verifyUserPhoneNumber();
+                  Container(
+                    width: MediaQuery.of(context).size.width / 1.2,
+                    height: 45,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Color.fromRGBO(24, 56, 113, 1)),
+                          // minimumSize: MaterialStateProperty.all(MediaQuery.of(context).size.width, 50),
+                          // padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.fromLTRB(MediaQuery.of(context).size.width/4, 15,MediaQuery.of(context).size.width/4, 15)),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
+                      // background
+                      // foreground
+                      onPressed: () async {
+                        // verifyUserPhoneNumber();
 
-                      // Validate returns true if the form is valid, or false otherwise.
+                        // Validate returns true if the form is valid, or false otherwise.
 
-                      if (_formKey.currentState!.validate()) {
-                        var ApiService =
-                            Provider.of<ApiServices>(context, listen: false);
-                        ApiService.Register(
-                                _fullname.text, _email.text, _phone.text)
-                            .then((el) {
-                          print("sucess${el}");
-                          showModalBottomSheet<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 500,
-                                child: OtpVerify(),
-                              );
-                            },
-                          );
-                        }).catchError((err) {
-                          print("err${err}");
-                          showModalBottomSheet<void>(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                height: 500,
-                                child: OtpVerify(),
-                              );
-                            },
-                          );
-                        });
-                        print("test");
-                        //   // If the form is valid, display a snackbar. In the real world,
-                        //   // you'd often call a server or save the information in a database.
+                        if (_formKey.currentState!.validate()) {
+                          var ApiService =
+                              Provider.of<ApiServices>(context, listen: false);
+                          ApiService.Register(
+                                  _fullname.text, _email.text, _phone.text)
+                              .then((el) {
+                            print("sucess${el}");
+                            showModalBottomSheet<void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Container(
+                                  height: 500,
+                                  child: OtpVerify(),
+                                );
+                              },
+                            );
+                          }).catchError((err) {
+                            print("err${err}");
+                            Fluttertoast.showToast(
+                                msg: "Signup failed please try again");
+                          });
+                          print("test");
+                          //   // If the form is valid, display a snackbar. In the real world,
+                          //   // you'd often call a server or save the information in a database.
 
-                        //   store.set("email", _email.text);
-                        //   store.set("phone", _phone.text);
-                        //   store.set("dob", _dob.text);
-                        //   store.set("aniversity", _aniversity.text);
-                        //   if(dropDownValue=='Married'){
-                        //     store.set("maritalStatus",'1');
-                        //   }
-                        //   else if(dropDownValue=='Unmarried'){
-                        //     store.set("maritalStatus", '2');
-                        //   }
-                        //   else {
-                        //     store.set("maritalStatus", '0');
-                        //   }
+                          //   store.set("email", _email.text);
+                          //   store.set("phone", _phone.text);
+                          //   store.set("dob", _dob.text);
+                          //   store.set("aniversity", _aniversity.text);
+                          //   if(dropDownValue=='Married'){
+                          //     store.set("maritalStatus",'1');
+                          //   }
+                          //   else if(dropDownValue=='Unmarried'){
+                          //     store.set("maritalStatus", '2');
+                          //   }
+                          //   else {
+                          //     store.set("maritalStatus", '0');
+                          //   }
 
-                        //   store.set("gender", gender);
-                        //   store.set("fullname", _fullname.text);
-                        //   if( _refferal.text=="" ||  _refferal.text ==null){
-                        //     store.set("referral", "");
-                        //   }
-                        //   else{
-                        //     store.set("referral", _refferal.text);
-                        //   }
-                        //   // Navigator.push(context, new MaterialPageRoute(builder: (context) => new OtpVerify()));
+                          //   store.set("gender", gender);
+                          //   store.set("fullname", _fullname.text);
+                          //   if( _refferal.text=="" ||  _refferal.text ==null){
+                          //     store.set("referral", "");
+                          //   }
+                          //   else{
+                          //     store.set("referral", _refferal.text);
+                          //   }
+                          //   // Navigator.push(context, new MaterialPageRoute(builder: (context) => new OtpVerify()));
 
-                        //   await _sayHello();
-                        //   // ScaffoldMessenger.of(context)
-                        //   //     .showSnackBar(SnackBar(content: Text('Processing Data')));
-                      }
-                    },
-                    child: Text('Next',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                        )),
+                          //   await _sayHello();
+                          //   // ScaffoldMessenger.of(context)
+                          //   //     .showSnackBar(SnackBar(content: Text('Processing Data')));
+                        }
+                      },
+                      child: Text('Sign Up',
+                          style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                          )),
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

@@ -23,6 +23,7 @@ class OtpVerify extends StatefulWidget {
 }
 
 class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   FirebaseAuth auth = FirebaseAuth.instance;
   // ..text = "123456";
   String? appSignature;
@@ -81,10 +82,14 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
       verificationId: receivedID,
       smsCode: _otp.text,
     );
-    await auth.signInWithCredential(credential).then((value) => {
-          Navigator.push(context,
-              new MaterialPageRoute(builder: (context) => new SignUpButton()))
-        });
+    await auth.signInWithCredential(credential).then((value) async {
+      final SharedPreferences prefs = await _prefs;
+      var ApiService = await Provider.of<ApiServices>(context, listen: false);
+      prefs.setString('login', "login");
+      prefs.setString('phone', ApiService.registerPhone);
+      Navigator.push(context,
+          new MaterialPageRoute(builder: (context) => new LandingPage()));
+    });
   }
 
   @override
@@ -123,7 +128,7 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
     // startTimer();
     _otp = TextEditingController();
     _phone = TextEditingController();
-    // verifyUserPhoneNumber();
+    verifyUserPhoneNumber();
   }
 
   @override
@@ -258,11 +263,11 @@ class _OtpVerifyState extends State<OtpVerify> with CodeAutoFill {
                 // background
                 // foreground
                 onPressed: () async {
-                  // verifyOTPCode();
-                  Navigator.push(
-                      context,
-                      new MaterialPageRoute(
-                          builder: (context) => new LandingPage()));
+                  verifyOTPCode();
+                  // Navigator.push(
+                  //     context,
+                  //     new MaterialPageRoute(
+                  //         builder: (context) => new LandingPage()));
                 },
                 child: Text('Verify OTP',
                     style: TextStyle(

@@ -1,60 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-import 'customer_property.dart';
+import 'documents.dart';
 
 /// Flutter code sample for [SliverAppBar].
 
-class CustomerKyc extends StatefulWidget {
-  const CustomerKyc({super.key});
+class CustomerUpdateProfile extends StatefulWidget {
+  const CustomerUpdateProfile({super.key});
 
   @override
-  State<CustomerKyc> createState() => _CustomerKycState();
+  State<CustomerUpdateProfile> createState() => _CustomerUpdateProfileState();
 }
 
-class _CustomerKycState extends State<CustomerKyc> {
+enum SingingCharacter { yes, no }
+
+class _CustomerUpdateProfileState extends State<CustomerUpdateProfile> {
   bool _pinned = true;
   bool _snap = true;
   bool _floating = true;
   var error = false;
+  var selected_bank;
+  var selected_builder;
+  var selected_income;
 
-  late TextEditingController aadhar_no;
-  late TextEditingController pan_no;
-  late TextEditingController cibil_score;
-  late TextEditingController montly_income;
-  late TextEditingController loan_amount;
-  late TextEditingController loan_tenure;
+  late TextEditingController customer_name;
+
+  late TextEditingController house_no;
+  late TextEditingController locality;
+  late TextEditingController city;
+  late TextEditingController pincode;
+  late TextEditingController state;
   var receivedID = '';
   String gender = '';
   late TextEditingController _phone;
   String phoneErrorMsg = '';
   bool phoneError = false;
   final _formKey = GlobalKey<FormState>();
+  int selectedRadio = 0;
+  SingingCharacter? _character = SingingCharacter.yes;
+  List<String> income_list = [
+    'Salaried',
+    'Self Employed - NP',
+    'Professionals',
+    'Others'
+  ];
+
   @override
   void initState() {
     super.initState();
 
-    aadhar_no = TextEditingController();
-    pan_no = TextEditingController();
-    // _dob = TextEditingController();
-    cibil_score = TextEditingController();
-    montly_income = TextEditingController();
-    loan_amount = TextEditingController();
-    loan_tenure = TextEditingController();
-    // _pincode = TextEditingController();
-    // _refferal = TextEditingController();
-    // _aniversity = TextEditingController();
+    house_no = TextEditingController();
+    customer_name = TextEditingController();
+    locality = TextEditingController();
+    city = TextEditingController();
+    state = TextEditingController();
+    pincode = TextEditingController();
   }
 
   @override
   void dispose() {
-    aadhar_no.dispose();
-    pan_no.dispose();
-    // _aniversity.dispose();
-    cibil_score.dispose();
-    montly_income.dispose();
-    loan_amount.dispose();
-    loan_tenure.dispose();
+    customer_name.dispose();
+    house_no.dispose();
+    locality.dispose();
+    city.dispose();
+    state.dispose();
+    pincode.dispose();
     super.dispose();
   }
 
@@ -89,11 +99,7 @@ class _CustomerKycState extends State<CustomerKyc> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Hi, Let Get Started",
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w300)),
-                              Text("KYC Details",
+                              Text("Profile Details",
                                   style: TextStyle(
                                       fontSize: 24,
                                       fontWeight: FontWeight.bold))
@@ -117,8 +123,8 @@ class _CustomerKycState extends State<CustomerKyc> {
                                     // ),
                                     pointers: <GaugePointer>[
                                       RangePointer(
-                                        value: 0,
-                                        width: 0.15,
+                                        value: 50,
+                                        width: 0.20,
                                         color: Color.fromRGBO(24, 56, 113, 1),
                                         // pointerOffset: 0.1,
                                         cornerStyle: CornerStyle.bothCurve,
@@ -130,7 +136,7 @@ class _CustomerKycState extends State<CustomerKyc> {
                                           positionFactor: 0.1,
                                           angle: 90,
                                           widget: Text(
-                                            '0/4',
+                                            '2/4',
                                             style: TextStyle(
                                                 fontSize: 24,
                                                 color: Color.fromRGBO(
@@ -184,12 +190,51 @@ class _CustomerKycState extends State<CustomerKyc> {
                             SizedBox(
                               height: 20,
                             ),
+                            Text(
+                              "Option to choose",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                            Row(
+                              children: [
+                                Row(
+                                  children: [
+                                    Radio(
+                                      value: SingingCharacter.yes,
+                                      groupValue: _character,
+                                      onChanged: (SingingCharacter? value) {
+                                        setState(() {
+                                          _character = value;
+                                        });
+                                      },
+                                    ),
+                                    Text("Primary"),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Radio(
+                                      value: SingingCharacter.no,
+                                      groupValue: _character,
+                                      onChanged: (SingingCharacter? value) {
+                                        setState(() {
+                                          _character = value;
+                                        });
+                                      },
+                                    ),
+                                    Text("Co-applicant"),
+                                  ],
+                                )
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
                             TextFormField(
                               keyboardType: TextInputType.text,
-                              controller: aadhar_no,
+                              controller: customer_name,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter Aadhar';
+                                  return 'Please enter Name';
                                 } else if (value.length < 4) {
                                   return 'Please Enter Min 4 Char';
                                 }
@@ -199,7 +244,70 @@ class _CustomerKycState extends State<CustomerKyc> {
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor),
                                 isDense: true,
-                                labelText: "Aadhar Number",
+                                labelText: "Customer Name",
+                                errorText: error == false ? null : '',
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromRGBO(24, 56, 113, 1)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromRGBO(24, 56, 113, 1)),
+                                ),
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                            SizedBox(
+                              height: error == false ? 20 : 0,
+                            ),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                                isDense: true,
+                                labelText: "Select Income Category",
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromRGBO(24, 56, 113, 1)),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color.fromRGBO(24, 56, 113, 1)),
+                                ),
+                                border: OutlineInputBorder(),
+                                hintStyle: TextStyle(color: Colors.grey[800]),
+                              ),
+                              value: selected_income,
+                              onChanged: (Value) {
+                                setState(() {
+                                  selected_bank = Value;
+                                });
+                              },
+                              items: income_list
+                                  .map((cityTitle) => DropdownMenuItem(
+                                      value: cityTitle,
+                                      child: Text("$cityTitle")))
+                                  .toList(),
+                            ),
+                            SizedBox(
+                              height: error == false ? 20 : 0,
+                            ),
+                            TextFormField(
+                              keyboardType: TextInputType.text,
+                              controller: house_no,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please Enter Flat/House No.';
+                                } else if (value.length < 4) {
+                                  return 'Please Enter Min 4 Char';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                labelStyle: TextStyle(
+                                    color: Theme.of(context).primaryColor),
+                                isDense: true,
+                                labelText: "Enter Flat/House No.",
                                 errorText: error == false ? null : '',
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -217,10 +325,10 @@ class _CustomerKycState extends State<CustomerKyc> {
                             ),
                             TextFormField(
                               keyboardType: TextInputType.text,
-                              controller: pan_no,
+                              controller: locality,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter Pan';
+                                  return 'Please Enter Locality or Area';
                                 } else if (value.length < 4) {
                                   return 'Please Enter Min 4 Char';
                                 }
@@ -230,7 +338,7 @@ class _CustomerKycState extends State<CustomerKyc> {
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor),
                                 isDense: true,
-                                labelText: "Pan Number",
+                                labelText: "Enter Locality or Area",
                                 errorText: error == false ? null : '',
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -248,10 +356,10 @@ class _CustomerKycState extends State<CustomerKyc> {
                             ),
                             TextFormField(
                               keyboardType: TextInputType.text,
-                              controller: cibil_score,
+                              controller: city,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter CIBIL';
+                                  return 'Please Enter City';
                                 } else if (value.length < 4) {
                                   return 'Please Enter Min 4 Char';
                                 }
@@ -261,7 +369,7 @@ class _CustomerKycState extends State<CustomerKyc> {
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor),
                                 isDense: true,
-                                labelText: "CIBIL Score",
+                                labelText: "Enter City",
                                 errorText: error == false ? null : '',
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -279,10 +387,10 @@ class _CustomerKycState extends State<CustomerKyc> {
                             ),
                             TextFormField(
                               keyboardType: TextInputType.text,
-                              controller: montly_income,
+                              controller: pincode,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter Montly Income';
+                                  return 'Please Enter Pincode';
                                 } else if (value.length < 4) {
                                   return 'Please Enter Min 4 Char';
                                 }
@@ -292,7 +400,7 @@ class _CustomerKycState extends State<CustomerKyc> {
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor),
                                 isDense: true,
-                                labelText: "Montly Income",
+                                labelText: "Enter Pincode",
                                 errorText: error == false ? null : '',
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -310,10 +418,10 @@ class _CustomerKycState extends State<CustomerKyc> {
                             ),
                             TextFormField(
                               keyboardType: TextInputType.text,
-                              controller: loan_amount,
+                              controller: state,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter Loan Amount';
+                                  return 'Please Enter State';
                                 } else if (value.length < 4) {
                                   return 'Please Enter Min 4 Char';
                                 }
@@ -323,38 +431,7 @@ class _CustomerKycState extends State<CustomerKyc> {
                                 labelStyle: TextStyle(
                                     color: Theme.of(context).primaryColor),
                                 isDense: true,
-                                labelText: "Loan Amount",
-                                errorText: error == false ? null : '',
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(24, 56, 113, 1)),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Color.fromRGBO(24, 56, 113, 1)),
-                                ),
-                                border: OutlineInputBorder(),
-                              ),
-                            ),
-                            SizedBox(
-                              height: error == false ? 20 : 0,
-                            ),
-                            TextFormField(
-                              keyboardType: TextInputType.text,
-                              controller: loan_tenure,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter Loan Tenure';
-                                } else if (value.length < 4) {
-                                  return 'Please Enter Min 4 Char';
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                labelStyle: TextStyle(
-                                    color: Theme.of(context).primaryColor),
-                                isDense: true,
-                                labelText: "Loan Tenure",
+                                labelText: "Enter State",
                                 errorText: error == false ? null : '',
                                 enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -390,7 +467,7 @@ class _CustomerKycState extends State<CustomerKyc> {
                                     context,
                                     new MaterialPageRoute(
                                         builder: (context) =>
-                                            new CustomerProperty()));
+                                            new CustomerDocuments()));
                                 if (_formKey.currentState!.validate()) {}
                               },
                               child: Text('Save & Continue',
